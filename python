@@ -1,0 +1,128 @@
+#Import the Packages-Download “Index2018.csv” file package
+import pandas as pd
+import numpy as np
+#Import matplotlib.pyplot as plt
+#Import seaborn as sns
+#Sns.set()
+
+#Importing the Data
+raw_csv_data = pd.read_csv(“Index2018.csv”)
+df_comp = raw_csv_data.cop()
+
+#Examining the Data 
+df_comp.head()
+df_comp
+df_comp.describe()
+df.comp.isna()
+df.comp.isna().sum()
+df.comp.spx.isna().sum()
+
+
+#Plotting the Data
+import matplotlib.pyplot as plt
+
+df.comp.spx.plot(figsize=(20,5), title = “S&P500 Prices”)
+plt.show()
+
+df.comp.ftse.plot(figsize=(20,5), title = “FTSE Prices”)
+plt.show()
+
+#Combined Graphs
+df.comp.spx.plot(figsize=(20,5), title = “S&P500 Prices”)
+df.comp.ftse.plot(figsize=(20,5), title = “FTSE Prices”)
+plt.title(“S&P v FTSE”)
+plt.show()
+
+#The Quantile Quantile (QQ) Plot 
+import scipy.stats
+import pylab
+
+scipy.stats.probplot(df_comp.spx, plot = pylab)
+pylab.show()
+
+#Section 4: Creating a Time Series Object in Python
+
+Length of the Time Period
+df_comp.date.describe()
+
+From Text to Date
+df_comp.date = Pd.to_datetime(df_comp.date)
+df_comp.head
+df_comp.date.describe()
+
+Setting the Index
+df_comp.set_index(“date”, inplace = True)
+df_comp.head()
+df_comp.describe()
+
+Setting the Desired Frequency
+df_comp = df_comp.asfreq(‘b’)
+df_comp.head
+
+
+
+Handling Missing Values
+df_comp.isna()
+df_comp.isna().sum() 
+df_comp.spx = df_comp.spx.fillna(method = “ffill”)
+df_comp.isna().sum() 
+df_comp.ftse = df_comp.ftse.fillna(method = “bfill”)
+df_comp.isna().sum()
+df_comp.dax = df_comp.dax.fillna(value = df_comp.dax.mean())
+df_comp.isna().sum() 
+
+
+Handling supplementary data
+df_comp[“market_value”]= df_comp.spx
+df_comp.describe()
+del df_comp[“spx”]
+df_comp.describe()
+del df_comp[“dax”], del df_comp[“ftse”], del df_comp[“nikkei”]
+df_comp.describe()
+
+#Splitting the Data – 
+size = int(len(df_comp)*0.8)
+df = df_comp.iloc[:size]
+df_test = df_comp.iloc[size:]
+
+#We do the following to compare the last elements (dates) of the training set with the first values of the testing set
+
+df.tail()
+df_test.head()
+
+#White Noise
+wn = np.random.normal(loc = df.market_value.mean(), df.market_value.std(), size = len(df))
+df[“wn”] = wn
+df.describe()
+
+df.wn.plot()
+plt.title(“White Noise Time Series”, sixe=24)
+plt.show()
+
+df.market_value.plot(figsize=(20,5))
+plt.title(“S&P Prices”, size - 24)
+plt.ylim(0,2300)
+plt.show()
+
+#Random Walk (Download RandWalk.csv file)
+rw = pd.read_csv(“RandWalk.csv”)
+rw.date = pd.to_datetime(rw.date, dayfirst = True)
+rw.set_index(“date”, inplace = True)
+rw = rw.asfreq(“b”)
+
+rw.describe()
+df[“rw”] = rw.price
+df.head()
+
+df.rw.plot(figsize = (20,5))
+df.market_value.plot()
+plt.title(“Random Walk vs S&P”, size = 24)
+plt.show()
+#Stationarity (imported prior)
+import statsmodels.tsa.stattools as sts
+sta.adfuller(df.market_value)
+
+sts.adfuller(df.wn)
+#Zero  p-value and no lags
+
+
